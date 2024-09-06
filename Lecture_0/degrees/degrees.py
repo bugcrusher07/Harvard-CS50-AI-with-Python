@@ -91,6 +91,42 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    if source == target:
+        tempList = list(people[source]["movies"])
+        list = [(tempList[0],source)]
+        return list
+
+    queueObj =  QueueFrontier()
+    sourceNode = Node(source,None,None)
+    queueObj.frontier.append(sourceNode)
+
+    loopVar = True
+    exploredNodes = []
+
+    while ( loopVar ):
+        try:
+            tempExpNode = queueObj.remove()
+        except Exception as e:
+            if str(e) == "empty frontier":
+                loopVar = False
+                break
+            else:
+                if tempExpNode.state == target:
+                    loopVar = False
+                    break
+
+                set = neighbors_for_person(tempExpNode.state)
+                for movie_id,person_id in set:
+                    if person_id is not in queueObj.frontier[x.state]:
+                    queueObj.frontier.append(Node(person_id,tempExpNode.state,movie_id))
+
+
+
+
+
+
+
+
 
     # TODO
     raise NotImplementedError
