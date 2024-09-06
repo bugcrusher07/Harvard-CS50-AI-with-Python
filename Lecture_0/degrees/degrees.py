@@ -91,46 +91,62 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+
     if source == target:
         tempList = list(people[source]["movies"])
         list = [(tempList[0],source)]
+        print("first Operation")
         return list
 
     queueObj =  QueueFrontier()
     sourceNode = Node(source,None,None)
-    queueObj.frontier.append(sourceNode)
+    queueObj.add(sourceNode)
+    for node in queueObj.frontier:
+        print("node :  state- " + node.state )
 
     loopVar = True
     exploredNodes = []
+    targetNode = None
+    print("where are we")
 
     while ( loopVar ):
-        try:
+        if len(queueObj.frontier) == 0:
+            loopVar = False
+            print("breaking because of empty frontier")
+            break
+        else:
             tempExpNode = queueObj.remove()
-        except Exception as e:
-            if str(e) == "empty frontier":
+            exploredNodes.append(tempExpNode)
+            if tempExpNode.state == target:
                 loopVar = False
+                targetNode = tempExpNode
+                print("not an exception break statement")
                 break
-            else:
-                if tempExpNode.state == target:
-                    loopVar = False
-                    break
 
-                set = neighbors_for_person(tempExpNode.state)
-                for movie_id,person_id in set:
-                    if person_id is not in queueObj.frontier[x.state]:
-                    queueObj.frontier.append(Node(person_id,tempExpNode.state,movie_id))
+            set = neighbors_for_person(tempExpNode.state)
+            for movie_id,person_id in set:
+                if if_person_id_not_in_frontier(person_id,queueObj.frontier) and person_id not in exploredNodes :
+                    queueObj.add(Node(person_id,tempExpNode,movie_id))
 
-
+    if targetNode!= None:
+        print("target Node is not Null")
+        return answer_list(targetNode,sourceNode)
 
 
 
-
-
-
-
-    # TODO
-    raise NotImplementedError
-
+def answer_list(targetNode,sourceNode):
+    childNode = targetNode
+    parentNode =sourceNode
+    list = []
+    loopVar = True
+    while (loopVar):
+        if childNode.parent != None:
+            list.append((childNode.action,childNode.state))
+            childNode = childNode.parent
+        else:
+            loopVar = False
+            break
+    return list
 
 def person_id_for_name(name):
     """
@@ -157,6 +173,14 @@ def person_id_for_name(name):
     else:
         return person_ids[0]
 
+def if_person_id_not_in_frontier(person_id,frontier):
+    list = []
+    for node in frontier:
+       list.append(node.state)
+    if person_id in list:
+        return False
+    else:
+        return True
 
 def neighbors_for_person(person_id):
     """
