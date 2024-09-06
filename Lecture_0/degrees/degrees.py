@@ -107,12 +107,12 @@ def shortest_path(source, target):
     loopVar = True
     exploredNodes = []
     targetNode = None
-    print("where are we")
+
 
     while ( loopVar ):
         if len(queueObj.frontier) == 0:
             loopVar = False
-            print("breaking because of empty frontier")
+
             break
         else:
             tempExpNode = queueObj.remove()
@@ -120,7 +120,7 @@ def shortest_path(source, target):
             if tempExpNode.state == target:
                 loopVar = False
                 targetNode = tempExpNode
-                print("not an exception break statement")
+
                 break
 
             set = neighbors_for_person(tempExpNode.state)
@@ -129,7 +129,7 @@ def shortest_path(source, target):
                     queueObj.add(Node(person_id,tempExpNode,movie_id))
 
     if targetNode!= None:
-        print("target Node is not Null")
+
         return answer_list(targetNode,sourceNode)
 
 
